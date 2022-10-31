@@ -11,6 +11,7 @@ const color = document.getElementById("color");
 const lineWidth = document.getElementById("line-width");
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
+const fs = document.querySelector("#font-size");
 
 const CANVAS_WIDTH = 550;
 const CANVAS_HEIGHT = 550;
@@ -21,6 +22,8 @@ ctx.lineWidth = lineWidth.value;
 ctx.lineCap = "round";
 let isPainting = false;
 let isFilling = false;
+let fontSize = fs.value;
+let font = "sans-serif";
 
 function onMove(event) {
   if (isPainting) {
@@ -70,13 +73,18 @@ function onCanvasClick() {
   }
 }
 
+//Destroy에 전에 내용작업 했던 양식을 복구하기 위해 save, restore 추가
 function onDestroyClick() {
+  ctx.save();
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  ctx.restore();
 }
 
+//color를 변경하는 것이기 때문에 input 에 대한 내용도 같이 변경
 function onEraserClick() {
   ctx.strokeStyle = "white";
+  color.value = ctx.strokeStyle;
   isFilling = false;
   modeBtn.innerText = "Fill";
 }
@@ -97,7 +105,7 @@ function onDoubleClick(event) {
   if (text !== "") {
     ctx.save();
     ctx.lineWidth = 1;
-    ctx.font = "68px sans-serif";
+    ctx.font = `${fontSize}px ${font}`;
     ctx.fillText(text, event.offsetX, event.offsetY);
     ctx.restore();
   }
@@ -109,6 +117,15 @@ function onSaveClick() {
   a.href = url;
   a.download = "myDrawing.png";
   a.click();
+}
+
+function onFontSizeChange(event){
+  fontSize = event.target.value;
+}
+
+function onTextInput(){
+  isFilling = false;
+  modeBtn.innerText = "Fill";
 }
 
 canvas.addEventListener("dblclick", onDoubleClick);
@@ -125,3 +142,8 @@ destroyBtn.addEventListener("click", onDestroyClick);
 eraserBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange);
 saveBtn.addEventListener("click", onSaveClick);
+fs.addEventListener("change",onFontSizeChange);
+
+//글자 입력시 storke 상태로 변경하기 위한 이벤트
+// 변경의 이유는 클릭이 event가 먼저 발생되어 fill 이 켜져있을 경우 화면이 채워짐
+textInput.addEventListener("change",onTextInput);
