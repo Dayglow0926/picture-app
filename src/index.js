@@ -119,11 +119,11 @@ function onSaveClick() {
   a.click();
 }
 
-function onFontSizeChange(event){
+function onFontSizeChange(event) {
   fontSize = event.target.value;
 }
 
-function onTextInput(){
+function onTextInput() {
   isFilling = false;
   modeBtn.innerText = "Fill";
 }
@@ -142,8 +142,8 @@ destroyBtn.addEventListener("click", onDestroyClick);
 eraserBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange);
 saveBtn.addEventListener("click", onSaveClick);
-fs.addEventListener("change",onFontSizeChange);
+fs.addEventListener("change", onFontSizeChange);
 
 //글자 입력시 storke 상태로 변경하기 위한 이벤트
 // 변경의 이유는 클릭이 event가 먼저 발생되어 fill 이 켜져있을 경우 화면이 채워짐
-textInput.addEventListener("change",onTextInput);
+textInput.addEventListener("change", onTextInput);
